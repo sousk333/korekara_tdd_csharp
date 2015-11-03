@@ -9,10 +9,14 @@ namespace TestKrekaraTdd
     public class BowlingGameTest
     {
         [Test]
-        public void インスタンス化のテスト()
+        public void AllGutterGame()
         {
             var game = new BowlingGame();
-            Assert.That(game, Is.Not.Null);
+            for(var i = 0; i < 20; i++)
+            {
+                game.RecordShot(0);
+            }
+            Assert.That(game.Score(), Is.EqualTo(0));
         }
     }
 }
