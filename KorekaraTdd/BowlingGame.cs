@@ -8,14 +8,16 @@ namespace KorekaraTdd
 {
     public class BowlingGame
     {
-        public void RecordShot(int pins)
-        {
+        public int Score { get; private set; }
 
+        public BowlingGame()
+        {
+            Score = 0;
         }
 
-        public int Score()
+        public void RecordShot(int pins)
         {
-            return 0;
+            Score += pins;
         }
     }
 }
