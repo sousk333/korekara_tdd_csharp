@@ -53,6 +53,39 @@ namespace TestKrekaraTdd
             Assert.That(game.Score, Is.EqualTo(13));
         }
 
+        [Test]
+        public void ストライクをとると次の2投分のピン数を加算()
+        {
+            foreach (var i in new int[] { 10, 3, 3, 1 })
+            {
+                game.RecordShot(i);
+            }
+            RecordManyShot(15, 0);
+            Assert.That(game.Score, Is.EqualTo(23));
+        }
+
+        [Test]
+        public void 連続ストライクすなわちダブル()
+        {
+            foreach (var i in new int[] { 10, 10, 3, 1 })
+            {
+                game.RecordShot(i);
+            }
+            RecordManyShot(14, 0);
+            Assert.That(game.Score, Is.EqualTo(41));
+        }
+
+        [Test]
+        public void 連続3回ストライクすなわちターキー()
+        {
+            foreach (var i in new int[] { 10, 10, 10, 3, 1 })
+            {
+                game.RecordShot(i);
+            }
+            RecordManyShot(12, 0);
+            Assert.That(game.Score, Is.EqualTo(71));
+        }
+
         private void RecordManyShot(int count, int pins)
         {
             for (var i = 0; i < count; i++)
