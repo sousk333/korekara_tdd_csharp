@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KorekaraTdd
 {
-    public class BowlingGame
+    class BowlingGame
     {
         public int Score { get; private set; }
 
@@ -15,20 +15,45 @@ namespace KorekaraTdd
         private int shotNo = 1;
         private int strikeBonusCount = 0;
         private int doubleBonusCount = 0;
+        private Frame frame = new Frame();
 
         public BowlingGame()
         {
             Score = 0;
         }
 
+        public int FrameScore(int frameNo)
+        {
+            return frame.Score;
+        }
+
         public void RecordShot(int pins)
         {
+            frame.RecordShot(pins);
             Score += pins;
             CalcSpareBonus(pins);
             CalcStrikeBonus(pins);
             lastPins = pins;
             ProceedNextShot();
 
+        }
+
+        private void AddStrikeBonus(int pins)
+        {
+            if (strikeBonusCount > 0)
+            {
+                Score += pins;
+                strikeBonusCount--;
+            }
+        }
+
+        private void AddDoubleBonus(int pins)
+        {
+            if (doubleBonusCount > 0)
+            {
+                Score += pins;
+                doubleBonusCount--;
+            }
         }
 
         private void CalcSpareBonus(int pins)
@@ -39,41 +64,45 @@ namespace KorekaraTdd
                 spare = false;
             }
 
-            if (shotNo == 2 && lastPins + pins == 10)
-            {
-                spare = true;
-            }
+            spare = IsSpare(pins);
         }
 
         private void CalcStrikeBonus(int pins)
         {
-            if (strikeBonusCount > 0)
-            {
-                Score += pins;
-                strikeBonusCount--;
-            }
+            AddStrikeBonus(pins);
+            AddDoubleBonus(pins);
 
-            if (doubleBonusCount > 0)
+            if (IsStrike(pins))
             {
-                Score += pins;
-                doubleBonusCount--;
+                RecognizeStrikeBonus();
             }
+        }
 
-            if (pins == 10)
+        private Boolean IsSpare(int pins)
+        {
+            return shotNo == 2 && lastPins + pins == 10;
+        }
+
+        private Boolean IsStrike(int pins)
+        {
+            return pins == 10;
+        }
+
+        private void RecognizeStrikeBonus()
+        {
+            if (strikeBonusCount == 0)
             {
-                if (strikeBonusCount == 0)
-                {
-                    strikeBonusCount = 2;
-                } else
-                {
-                    doubleBonusCount = 2;
-                }
+                strikeBonusCount = 2;
+            }
+            else
+            {
+                doubleBonusCount = 2;
             }
         }
 
         private void ProceedNextShot()
         {
-            if (shotNo == 1)
+            if (shotNo == 1 && strikeBonusCount < 2 && doubleBonusCount < 2)
             {
                 shotNo++;
             }

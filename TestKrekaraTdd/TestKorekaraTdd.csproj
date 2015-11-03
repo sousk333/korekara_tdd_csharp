@@ -6,8 +6,8 @@
     <ProjectGuid>{6D89A011-7D74-4FB5-AE39-FEEC411E5034}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestKrekaraTdd</RootNamespace>
-    <AssemblyName>TestKrekaraTdd</AssemblyName>
+    <RootNamespace>TestKorekaraTdd</RootNamespace>
+    <AssemblyName>TestKorekaraTdd</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -59,6 +59,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BowlingGameTest.cs" />
+    <Compile Include="FrameTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

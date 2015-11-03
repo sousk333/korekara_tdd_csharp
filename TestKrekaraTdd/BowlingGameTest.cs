@@ -1,7 +1,7 @@
 ﻿using System;
 using KorekaraTdd;
 
-namespace TestKrekaraTdd
+namespace TestKorekaraTdd
 {
     using NUnit.Framework;
 
@@ -84,6 +84,43 @@ namespace TestKrekaraTdd
             }
             RecordManyShot(12, 0);
             Assert.That(game.Score, Is.EqualTo(71));
+        }
+
+        [Test]
+        public void ストライクの後のスペア()
+        {
+            foreach (var i in new int[] { 10, 5, 5, 3 })
+            {
+                game.RecordShot(i);
+            }
+            RecordManyShot(15, 0);
+            Assert.That(game.Score, Is.EqualTo(36));
+        }
+
+        [Test]
+        public void ダブル後のスペア()
+        {
+            foreach (var i in new int[] { 10, 10, 5, 5, 3 })
+            {
+                game.RecordShot(i);
+            }
+            RecordManyShot(13, 0);
+            Assert.That(game.Score, Is.EqualTo(61));
+        }
+
+        [Test]
+        public void 全ての投球がガターの場合の第1フレームの得点()
+        {
+            RecordManyShot(20, 0);
+            Assert.That(game.FrameScore(1), Is.EqualTo(0));
+        }
+
+        [Test]
+        [Ignore("Ignore a test")]
+        public void 全ての投球が1ピンだと全フレーム2点()
+        {
+            RecordManyShot(20, 1);
+            Assert.That(game.FrameScore(1), Is.EqualTo(2));
         }
 
         private void RecordManyShot(int count, int pins)
