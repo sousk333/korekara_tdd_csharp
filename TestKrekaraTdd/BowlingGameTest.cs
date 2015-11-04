@@ -33,13 +33,12 @@ namespace TestKorekaraTdd
         [Test]
         public void スペアをとると次の投球のピン数を加算()
         {
-            foreach(var i in new int[] { 3, 7, 4 })
-            {
-                game.RecordShot(i);
-            }
+            RecordSpare();
+            game.RecordShot(4);
             RecordManyShot(17, 0);
 
             Assert.That(game.Score, Is.EqualTo(18));
+            Assert.That(game.FrameScore(1), Is.EqualTo(14));
         }
 
         [Test]
@@ -56,29 +55,36 @@ namespace TestKorekaraTdd
         [Test]
         public void ストライクをとると次の2投分のピン数を加算()
         {
-            foreach (var i in new int[] { 10, 3, 3, 1 })
+            RecordStrike();
+            foreach (var i in new int[] { 3, 3, 1 })
             {
                 game.RecordShot(i);
             }
             RecordManyShot(15, 0);
             Assert.That(game.Score, Is.EqualTo(23));
+            Assert.That(game.FrameScore(1), Is.EqualTo(16));
         }
 
         [Test]
         public void 連続ストライクすなわちダブル()
         {
-            foreach (var i in new int[] { 10, 10, 3, 1 })
+            RecordStrike();
+            RecordStrike();
+            foreach (var i in new int[] { 3, 1 })
             {
                 game.RecordShot(i);
             }
             RecordManyShot(14, 0);
             Assert.That(game.Score, Is.EqualTo(41));
+            Assert.That(game.FrameScore(1), Is.EqualTo(23));
+            Assert.That(game.FrameScore(2), Is.EqualTo(14));
         }
 
         [Test]
         public void 連続3回ストライクすなわちターキー()
         {
-            foreach (var i in new int[] { 10, 10, 10, 3, 1 })
+            for (var i = 0; i < 3; i++) { RecordStrike(); }
+            foreach (var i in new int[] { 3, 1 })
             {
                 game.RecordShot(i);
             }
@@ -89,10 +95,9 @@ namespace TestKorekaraTdd
         [Test]
         public void ストライクの後のスペア()
         {
-            foreach (var i in new int[] { 10, 5, 5, 3 })
-            {
-                game.RecordShot(i);
-            }
+            RecordStrike();
+            RecordSpare();
+            game.RecordShot(3);
             RecordManyShot(15, 0);
             Assert.That(game.Score, Is.EqualTo(36));
         }
@@ -100,10 +105,10 @@ namespace TestKorekaraTdd
         [Test]
         public void ダブル後のスペア()
         {
-            foreach (var i in new int[] { 10, 10, 5, 5, 3 })
-            {
-                game.RecordShot(i);
-            }
+            RecordStrike();
+            RecordStrike();
+            RecordSpare();
+            game.RecordShot(3);
             RecordManyShot(13, 0);
             Assert.That(game.Score, Is.EqualTo(61));
         }
@@ -128,6 +133,16 @@ namespace TestKorekaraTdd
             {
                 game.RecordShot(pins);
             }
+        }
+
+        private void RecordStrike()
+        {
+            game.RecordShot(10);
+        }
+
+        private void RecordSpare()
+        {
+            RecordManyShot(2, 5);
         }
     }
 }

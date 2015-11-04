@@ -8,17 +8,9 @@ namespace KorekaraTdd
 {
     class BowlingGame
     {
-        public int Score { get; private set; }
-
-        private bool spare = false;
-        private int strikeBonusCount = 0;
-        private int doubleBonusCount = 0;
+        private Frame spareFrame;
+        private List<Frame> strikes = new List<Frame> { };
         private IList<Frame> frames = new List<Frame> { new Frame() };
-
-        public BowlingGame()
-        {
-            Score = 0;
-        }
 
         public int FrameScore(int frameNo)
         {
@@ -28,7 +20,6 @@ namespace KorekaraTdd
         public void RecordShot(int pins)
         {
             frames.Last().RecordShot(pins);
-            Score += pins;
             CalcSpareBonus(pins);
             CalcStrikeBonus(pins);
             if (frames.Last().IsFinished())
@@ -37,40 +28,43 @@ namespace KorekaraTdd
             }
         }
 
-        private void AddStrikeBonus(int pins)
+        public int Score()
         {
-            if (strikeBonusCount > 0)
+            int total = 0;
+            foreach(var frame in frames)
             {
-                Score += pins;
-                strikeBonusCount--;
+                total += frame.Score;
             }
+            return total;
         }
 
-        private void AddDoubleBonus(int pins)
+        private void AddStrikeBonus(int pins)
         {
-            if (doubleBonusCount > 0)
+            foreach(var strike in strikes)
             {
-                Score += pins;
-                doubleBonusCount--;
+                if (strike.IsNeedBonus())
+                {
+                    strike.AddBonus(pins);
+                }
             }
         }
 
         private void CalcSpareBonus(int pins)
         {
-            if (spare)
+            if (spareFrame != null && spareFrame.IsNeedBonus())
             {
-                Score += pins;
-                spare = false;
+                spareFrame.AddBonus(pins);
             }
 
-            spare = frames.Last().IsSpare();
+            if (frames.Last().IsSpare())
+            {
+               spareFrame = frames.Last();
+            }
         }
 
         private void CalcStrikeBonus(int pins)
         {
             AddStrikeBonus(pins);
-            AddDoubleBonus(pins);
-
             if (frames.Last().IsStrike())
             {
                 RecognizeStrikeBonus();
@@ -79,14 +73,7 @@ namespace KorekaraTdd
 
         private void RecognizeStrikeBonus()
         {
-            if (strikeBonusCount == 0)
-            {
-                strikeBonusCount = 2;
-            }
-            else
-            {
-                doubleBonusCount = 2;
-            }
+            strikes.Add(frames.Last());
         }
     }
 }

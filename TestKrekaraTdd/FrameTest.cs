@@ -64,5 +64,48 @@ namespace TestKorekaraTdd
             frame.RecordShot(10);
             Assert.That(frame.IsStrike(), Is.True);
         }
+
+        [Test]
+        public void ボーナス点を加算する()
+        {
+            frame.RecordShot(5);
+            frame.RecordShot(5);
+            frame.AddBonus(5);
+            Assert.That(frame.Score, Is.EqualTo(15));
+        }
+
+        [Test]
+        public void オープンフレームにはボーナス不要()
+        {
+            frame.RecordShot(3);
+            frame.RecordShot(3);
+            Assert.That(frame.IsNeedBonus(), Is.False);
+        }
+
+        [Test]
+        public void スペアのボーナスは1投分で完了()
+        {
+            frame.RecordShot(5);
+            frame.RecordShot(5);
+            Assert.That(frame.IsNeedBonus(), Is.True);
+            frame.AddBonus(5);
+            Assert.That(frame.IsNeedBonus(), Is.False);
+        }
+
+        [Test]
+        public void ストライクのボーナスは2投分で完了()
+        {
+            frame.RecordShot(10);
+            frame.AddBonus(5);
+            Assert.That(frame.IsNeedBonus(), Is.True);
+            frame.AddBonus(5);
+            Assert.That(frame.IsNeedBonus(), Is.False);
+        }
+
+        [Test]
+        public void ピン数は0本以上()
+        {
+            Assert.Throws<ArgumentException>( delegate { frame.RecordShot(-1); });
+        }
     }
 }
