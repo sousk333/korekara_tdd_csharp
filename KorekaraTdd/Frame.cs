@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KorekaraTdd
 {
@@ -38,22 +34,22 @@ namespace KorekaraTdd
             bonusCount++;
         }
 
-        public Boolean IsFinished()
+        public bool IsFinished()
         {
             return Score >= 10 || shotCount > 1;
         }
 
-        public Boolean IsSpare()
+        public bool IsSpare()
         {
             return Score >= 10 && shotCount > 1;
         }
 
-        public Boolean IsStrike()
+        public bool IsStrike()
         {
             return Score >= 10 && shotCount == 1;
         }
 
-        public Boolean IsNeedBonus()
+        public bool IsNeedBonus()
         {
             if (IsSpare())
             {
