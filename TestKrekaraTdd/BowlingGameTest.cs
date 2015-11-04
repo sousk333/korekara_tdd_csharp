@@ -17,7 +17,7 @@ namespace TestKorekaraTdd
         }
 
         [Test]
-        public void すべての投球がガター()
+        public void 全ての投球がガター()
         {
             RecordManyShot(20, 0);
             Assert.That(game.Score, Is.EqualTo(0));
