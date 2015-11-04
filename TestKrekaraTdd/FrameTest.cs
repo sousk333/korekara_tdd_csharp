@@ -31,5 +31,38 @@ namespace TestKorekaraTdd
             frame.RecordShot(1);
             Assert.That(frame.Score, Is.EqualTo(2));
         }
+
+        [Test]
+        public void 二投するとフレームは完了する()
+        {
+            frame.RecordShot(1);
+            Assert.That(frame.IsFinished(), Is.False);
+            frame.RecordShot(1);
+            Assert.That(frame.IsFinished(), Is.True);
+        }
+
+        [Test]
+        public void 十ピン倒した時点でフレームは完了する()
+        {
+            frame.RecordShot(10);
+            Assert.That(frame.IsFinished, Is.True);
+        }
+
+        [Test]
+        public void 二投目で10ピン倒すとスペア()
+        {
+            frame.RecordShot(5);
+            Assert.That(frame.IsSpare(), Is.False);
+            frame.RecordShot(5);
+            Assert.That(frame.IsSpare(), Is.True);
+        }
+
+        [Test]
+        public void 一投目で10ピン倒すとストライク()
+        {
+            Assert.That(frame.IsStrike(), Is.False);
+            frame.RecordShot(10);
+            Assert.That(frame.IsStrike(), Is.True);
+        }
     }
 }

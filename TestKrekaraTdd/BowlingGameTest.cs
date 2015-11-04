@@ -116,7 +116,6 @@ namespace TestKorekaraTdd
         }
 
         [Test]
-        [Ignore("Ignore a test")]
         public void 全ての投球が1ピンだと全フレーム2点()
         {
             RecordManyShot(20, 1);

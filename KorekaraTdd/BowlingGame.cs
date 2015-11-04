@@ -11,11 +11,9 @@ namespace KorekaraTdd
         public int Score { get; private set; }
 
         private bool spare = false;
-        private int lastPins = 0;
-        private int shotNo = 1;
         private int strikeBonusCount = 0;
         private int doubleBonusCount = 0;
-        private Frame frame = new Frame();
+        private IList<Frame> frames = new List<Frame> { new Frame() };
 
         public BowlingGame()
         {
@@ -24,18 +22,19 @@ namespace KorekaraTdd
 
         public int FrameScore(int frameNo)
         {
-            return frame.Score;
+            return frames[frameNo - 1].Score;
         }
 
         public void RecordShot(int pins)
         {
-            frame.RecordShot(pins);
+            frames.Last().RecordShot(pins);
             Score += pins;
             CalcSpareBonus(pins);
             CalcStrikeBonus(pins);
-            lastPins = pins;
-            ProceedNextShot();
-
+            if (frames.Last().IsFinished())
+            {
+                frames.Add(new Frame());
+            }
         }
 
         private void AddStrikeBonus(int pins)
@@ -64,7 +63,7 @@ namespace KorekaraTdd
                 spare = false;
             }
 
-            spare = IsSpare(pins);
+            spare = frames.Last().IsSpare();
         }
 
         private void CalcStrikeBonus(int pins)
@@ -72,20 +71,10 @@ namespace KorekaraTdd
             AddStrikeBonus(pins);
             AddDoubleBonus(pins);
 
-            if (IsStrike(pins))
+            if (frames.Last().IsStrike())
             {
                 RecognizeStrikeBonus();
             }
-        }
-
-        private Boolean IsSpare(int pins)
-        {
-            return shotNo == 2 && lastPins + pins == 10;
-        }
-
-        private Boolean IsStrike(int pins)
-        {
-            return pins == 10;
         }
 
         private void RecognizeStrikeBonus()
@@ -97,18 +86,6 @@ namespace KorekaraTdd
             else
             {
                 doubleBonusCount = 2;
-            }
-        }
-
-        private void ProceedNextShot()
-        {
-            if (shotNo == 1 && strikeBonusCount < 2 && doubleBonusCount < 2)
-            {
-                shotNo++;
-            }
-            else
-            {
-                shotNo = 1;
             }
         }
     }
